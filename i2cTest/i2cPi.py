@@ -5,7 +5,7 @@ import time
 
 bus = smbus.SMBus(1)
 
-DEVICE_ADDRESS = 0x10
+DEVICE_ADDRESS = 10
 
 
 def writeNumber(num):
@@ -17,6 +17,7 @@ def readNumber():
     return num
 
 while True:
+    DEVICE_ADDRESS = int(input("Enter device address: "))
     var = int(input("Enter single digit: "))
     if not var:
         continue

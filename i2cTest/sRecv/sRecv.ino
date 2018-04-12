@@ -1,6 +1,6 @@
 #include <Wire.h>
 
-#define sAddr 0x10
+#define sAddr 11
 int num = 0;
 int state = 0;
 
