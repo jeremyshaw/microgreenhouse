@@ -36,9 +36,9 @@ void loop()
 		break;
   }
   // DISPLAY DATA
-  Serial.print(DHT.humidity, 1);
+  Serial.print(int(DHT.humidity));
   Serial.print(",\t");
-  Serial.println(DHT.temperature, 1);
+  Serial.println(int(DHT.temperature));
 
   delay(2000);
 }
