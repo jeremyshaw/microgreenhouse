@@ -1,0 +1,148 @@
+#include <Servo.h>
+#include <stdio.h>
+#include <Wire.h>
+
+#define sAddr 12
+Servo servo;
+
+//Pin setups; not touched by Pi
+const int fanPinPWM = 3;
+const int relayPin = 4;
+//const int speedValPin = A3; 		//Only used if 4-pin fan won't work when only using 3 of its pins
+const int servoventPin = 9;
+
+
+//Predefined servo states/fan speeds; not touched by Pi
+//Servo values
+const int closedVent = 0;
+const int partOpenVent = 90;
+const int fullOpenVent = 180;
+//Fan values
+const int offSpeed = 0;
+const int slowSpeed = 50;
+const int medSpeed = 150;
+const int highSpeed = 255;
+
+//Variables passed from Pi
+const int toggleVal = 4;
+int userInput;
+int fanSpeed = 0;
+
+boolean fanState = false;
+
+//Variables manipulated only by slave
+boolean ventState = false;
+
+
+	
+void setup()
+{
+	pinMode(relayPin, OUTPUT);
+	digitalWrite(relayPin, LOW);
+	servo.write(servoPin);
+	Serial.begin(9600);
+}
+
+
+void loop()
+{
+	delay(10);
+}
+
+
+void receiveData(int byteCount)
+{
+	while(Wire.available())
+	{
+		userInput = Wire.read();
+		if (userInput == toggleVal)
+		{
+			if (fanState == false)
+				fanState = true;
+				digitalWrite(relayPin, HIGH);
+			else
+				fanState = false;
+				digitalWrite(relayPin, LOW);
+		}
+		else
+			fanSpeed = Wire.read();
+	}
+}
+
+
+//Send fanState, fanSpeed, and ventState back to the Pi
+void sendData()
+{
+	if (fanState == true)
+	{
+		Wire.write("ON");
+		switch (fanSpeed)
+		{
+			case 1:
+				Wire.write("LOW");
+				break;
+			case 2:
+				Wire.write("MEDIUM");
+				break;
+			default:
+				Wire.write("HIGH");
+		}
+	}
+	else
+		Wire.write("OFF");
+	
+	if (ventState == true)
+		Wire.write("OPEN");
+	else
+		Wire.write("CLOSED");
+}
+
+
+void fanPWM()
+{
+	if (fanState == true)
+	{
+		//Temperature tolerance sets the range of the Target temperature.
+		if (fanSpeed == 0)
+		{
+			analogWrite(fanPinPWM, offSpeed);
+			ventState = false;
+		}
+		if (fanSpeed == 1)
+		{
+			analogWrite(fanPinPWM, slowSpeed);
+			ventState = true;
+		}
+		if (fanSpeed == 2)
+		{
+			analogWrite(fanPinPWM, medSpeed);
+			ventState = true;
+		}
+		if (fanSpeed == 3)
+		{
+			analogWrite(fanPinPWM, highSpeed);
+			ventState = true;
+		}
+	}
+	else
+	{
+		analogWrite(fanPinPWM, offSpeed);
+		currSpeed = offSpeed;
+		ventState = false;
+	}
+}
+
+
+//Is closed when the fan is not in operation
+void ventControl(int tempVal)
+{
+	if (ventState == true)
+	{
+		if (fanSpeed == 1 || fanSpeed == 2)
+			servo.write(partOpenVent);
+		else if (fanSpeed == 3)
+			servo.write(fullOpenVent);
+	}
+	else
+		servo.write(0);
+}
