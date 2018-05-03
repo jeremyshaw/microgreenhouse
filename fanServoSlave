@@ -1,5 +1,4 @@
 #include <Servo.h>
-#include <stdio.h>
 #include <Wire.h>
 
 #define sAddr 12
@@ -8,8 +7,8 @@ Servo servo;
 //Pin setups; not touched by Pi
 const int fanPinPWM = 3;
 const int relayPin = 4;
-//const int speedValPin = A3; 		//Only used if 4-pin fan won't work when only using 3 of its pins
-const int servoventPin = 9;
+const int speedValPin = A3; 		//Only used if 4-pin fan won't work when only using 3 of its pins
+const int servoPin = 9;
 
 
 //Predefined servo states/fan speeds; not touched by Pi
@@ -38,14 +37,22 @@ boolean ventState = false;
 void setup()
 {
 	pinMode(relayPin, OUTPUT);
-	digitalWrite(relayPin, LOW);
+    pinMode(speedValPin, INPUT);
+	digitalWrite(relayPin, HIGH);
 	servo.write(servoPin);
+  
+    Wire.begin(sAddr);
+    Wire.onReceive(receiveData);
+    Wire.onRequest(sendData);
+    
 	Serial.begin(9600);
 }
 
 
 void loop()
 {
+    fanPWM();
+    ventControl();
 	delay(10);
 }
 
@@ -58,14 +65,20 @@ void receiveData(int byteCount)
 		if (userInput == toggleVal)
 		{
 			if (fanState == false)
+            {
 				fanState = true;
-				digitalWrite(relayPin, HIGH);
-			else
-				fanState = false;
 				digitalWrite(relayPin, LOW);
+            }
+			else if (fanState == true)
+            {
+				fanState = false;
+				digitalWrite(relayPin, HIGH);
+            }
 		}
 		else
-			fanSpeed = Wire.read();
+        {
+			fanSpeed = userInput;
+        }
 	}
 }
 
@@ -100,7 +113,7 @@ void sendData()
 
 void fanPWM()
 {
-	if (fanState == true)
+	if (fanState == 1)
 	{
 		//Temperature tolerance sets the range of the Target temperature.
 		if (fanSpeed == 0)
@@ -127,7 +140,6 @@ void fanPWM()
 	else
 	{
 		analogWrite(fanPinPWM, offSpeed);
-		currSpeed = offSpeed;
 		ventState = false;
 	}
 }
