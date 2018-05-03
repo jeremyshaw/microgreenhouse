@@ -39,7 +39,7 @@ void setup()
 	pinMode(relayPin, OUTPUT);
     pinMode(speedValPin, INPUT);
 	digitalWrite(relayPin, HIGH);
-	servo.write(servoPin);
+	servo.attach(servoPin);
   
     Wire.begin(sAddr);
     Wire.onReceive(receiveData);
@@ -146,9 +146,10 @@ void fanPWM()
 
 
 //Is closed when the fan is not in operation
-void ventControl(int tempVal)
+void ventControl()
 {
-	if (ventState == true)
+    
+	if (ventState == 1)
 	{
 		if (fanSpeed == 1 || fanSpeed == 2)
 			servo.write(partOpenVent);
