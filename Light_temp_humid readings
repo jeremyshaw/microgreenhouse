@@ -1,0 +1,38 @@
+#include <dht.h> //dht library
+
+
+dht DHT;
+
+#define DHT11_PIN 77 //dht pin
+
+/*Phototransistor Initializaiton*/
+int photoTran = A1;
+int reading = 0;
+
+void setup()
+{
+
+  pinMode(photoTran,INPUT);
+  Serial.begin(9600);
+  Serial.println("Type,\tstatus,\tHumidity (%),\tTemperature (C), \tLight");
+  
+}
+
+void loop()
+{
+  // READ DATA
+  reading = analogRead(photoTran);
+  Serial.print("DHT11, \t");
+ 
+  // DISPLAY DATA
+  Serial.print(int(DHT.humidity)); //humidity reading
+  Serial.print(",\t");
+  Serial.println(int(DHT.temperature)); //temp reading
+  Serial.print(",\t");
+  Serial.println(reading); //light reading
+
+  delay(2000); //2 second delay
+}
+//
+// END OF FILE
+//
