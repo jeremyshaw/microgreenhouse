@@ -1,0 +1,46 @@
+#include <dht.h>
+
+#include <dht.h>
+
+dht DHT;
+#include <Wire.h>
+
+#define sAddr 13
+#define DHT11_PIN 77
+
+int num = 0;
+//int state = 0;
+
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(9600);
+
+  Wire.begin(sAddr);
+
+  Wire.onReceive(receiveData);
+  Wire.onRequest(sendData);
+
+  //Serial.println("Start");
+
+}
+
+void loop() {
+  delay(100);
+
+}
+
+void receiveData(int byteCount){
+  while(Wire.available()){
+    num = Wire.read();
+    Serial.print("hum: ");
+    Serial.println(int(DHT.humidity));
+    Wire.write(int(DHT.humidity));
+  }
+}
+
+void sendData(){
+  int chk = DHT.read11(DHT11_PIN);
+  Wire.write(int(DHT.humidity));  
+}
+
