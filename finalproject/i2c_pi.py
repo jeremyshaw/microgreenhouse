@@ -1,5 +1,6 @@
-#Vadim Babiy Wednessday
 #!/usr/bin/python3
+#Vadim Babiy Wednessday
+
 import _thread, smbus, socket, sys, time
 
 #still needs: more try:except error escapes to prevent crashes on I/O errors
