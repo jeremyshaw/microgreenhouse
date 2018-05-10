@@ -71,7 +71,7 @@ def writeFile():
 
 def readFile():
     f = open(tf, 'r')
-    print("Green Machine\n\n")
+    print("\n\nGreen Machine\n")
     print("Water level = " + f.readline())
     print("Temperature Sensor = " + f.readline())
     print("Light Sensor = " + f.readline())
@@ -192,7 +192,7 @@ def number13():
             writeNumber(options)
             time.sleep(1)
             temp_sensor = readNumber()
-            print("temperature = " + str(temp_sensor))
+            print("temperature = " + str(temp_sensor) + "C")
         elif options == 2:
             writeNumber(options)
             time.sleep(1)
@@ -202,7 +202,7 @@ def number13():
             writeNumber(options)
             time.sleep(1)
             humidity_sensor = readNumber()
-            print("humidity = " + str(humidity_sensor))
+            print("humidity = " + str(humidity_sensor) + "%")
         if not options:
             continue
 
