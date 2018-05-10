@@ -1,3 +1,4 @@
+#Vadim Babiy Wednessday
 #!/usr/bin/python3
 import _thread, smbus, socket, sys, time
 

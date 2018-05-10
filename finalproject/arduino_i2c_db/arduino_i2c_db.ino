@@ -1,3 +1,4 @@
+#Daniel Bracamontes Thursday Nights
 #include <Wire.h>
 #include "dht.h"
 //Jeremy = 11, Wesley = 12, Daniel = 13

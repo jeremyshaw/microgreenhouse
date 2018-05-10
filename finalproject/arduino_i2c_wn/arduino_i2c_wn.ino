@@ -1,5 +1,5 @@
 /*  CpE 185 Final Project
-  Author: Wesley Nguyen
+  Author: Wesley Nguyen (Tuesday Morning) - Eric Telles
   Last Modified: May 4, 2018 */
 
 #include <Servo.h>
