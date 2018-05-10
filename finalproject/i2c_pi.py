@@ -75,7 +75,7 @@ def readFile():
     print("Water level = " + f.readline())
     print("Temperature Sensor = " + f.readline())
     print("Light Sensor = " + f.readline())
-    print("Humidity Sensor = " f.readline())
+    print("Humidity Sensor = " + f.readline())
     f.close()
 
         
