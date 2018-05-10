@@ -1,7 +1,5 @@
 #include <dht.h>
 
-#include <dht.h>
-
 dht DHT;
 #include <Wire.h>
 
@@ -36,11 +34,13 @@ void receiveData(int byteCount){
     Serial.print("hum: ");
     Serial.println(int(DHT.humidity));
     Wire.write(int(DHT.humidity));
+    Wire.write(int(DHT.temperature));
   }
 }
 
 void sendData(){
   int chk = DHT.read11(DHT11_PIN);
-  Wire.write(int(DHT.humidity));  
+  Wire.write(int(DHT.humidity));
+  Wire.write(int(DHT.temperature));
 }
 
