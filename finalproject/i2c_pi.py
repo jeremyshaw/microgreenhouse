@@ -56,6 +56,27 @@ def web_server():
         connectionSocket.send(b'humidity sensor = ' + bytes(str(humidity_sensor), 'ascii') + b'% <p>')
         connectionSocket.send(b'</body></html>')
         connectionSocket.close()
+
+    writeFile()
+
+def writeFile():
+    f = open(tf, 'w')
+    f.writelines(str(waterlevel) + "\n"
+                 + str(temp_sensor) + "\n"
+                 + str(light_sensor) + "\n"
+                 + str(humidity_sensor) + "\n"
+                 )
+    f.close()
+
+def readFile():
+    f = open(tf, 'r')
+    print("Green Machine\n\n")
+    print("Water level = " + f.readline())
+    print("Temperature Sensor = " + f.readline())
+    print("Light Sensor = " + f.readline())
+    print("Humidity Sensor = " f.readline())
+    f.close()
+
         
 try: 
     _thread.start_new_thread(web_server,() )
@@ -108,6 +129,9 @@ def number11():
             print("light state = " + str(lightswitch))
         if not options:
             continue
+
+
+
 
 
 def number12():
@@ -178,23 +202,9 @@ def number13():
         if not options:
             continue
 
-def writeFile():
-    f = open(tf, 'w')
-    f.writelines(str(waterlevel) +"\n" + str(waterpump) + "\n"
-            + str(heaterswitch) + "\n" + str(lightswitch) + "\n"
-            + str(lowtemp) + "\n" + str(hitemp) + "\n"
-            + str(fanswitch) + "\n" + str(temp_sensor) + "\n"
-            + str(light_sensor) + "\n" + str(humidity_sensor) + "\n"
-            )
-    f.close()
-
-def showData():
-    print("water level = " + str(waterlevel))
-    print("water pump = " + str(waterpump))
-
 while True:
     print("0 for write file")
-    print("1 for show data")
+    print("1 for read file")
     print("11 for Jeremy")
     print("12 for Wesley")
     print("13 for Daniel")
@@ -209,7 +219,7 @@ while True:
     elif address == 13:
         number13()
     elif address == 1:
-        showData()
+        readFile()
     elif address == 0:
         writeFile()
     else:
