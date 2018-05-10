@@ -13,8 +13,6 @@ waterlevel = 0
 waterpump = 0
 heaterswitch = 0
 lightswitch = 0
-lowtemp = 0
-hitemp = 0
 fanswitch = 0
 temp_sensor = 0
 light_sensor = 0
@@ -24,7 +22,8 @@ def web_server():
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind(('', 12341))
     serverSocket.listen(1)
-
+    global waterlevel, temp_sensor, light_sensor, humidity_sensor
+    
     while True:
         connectionSocket, addr = serverSocket.accept()
         print('Ready to serve...')
@@ -61,6 +60,7 @@ def web_server():
     writeFile()
 
 def writeFile():
+    global waterlevel, temp_sensor, light_sensor, humidity_sensor
     f = open(tf, 'w')
     f.writelines(str(waterlevel) + "\n"
                  + str(temp_sensor) + "\n"
@@ -94,6 +94,7 @@ def readNumber():
 
 def number11():
     #jeremy
+    global waterlevel, waterpump, heaterswitch, lightswitch
     print("This is Jeremy's Arduino")
     while True:
         print("0 for exit")
@@ -137,6 +138,7 @@ def number11():
 
 def number12():
     #wesley
+    global fanswitch
     print("you chose Wesley's Arduino")
     while True:
         #print("Current temp is <insert temp>")
@@ -172,6 +174,7 @@ def number12():
         
 def number13():
     #daniel
+    global temp_sensor, light_sensor, humidity_sensor
     print("Daniel's Arduino reporting")
     while True:
         print("0 for exit")
