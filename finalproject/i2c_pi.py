@@ -1,5 +1,6 @@
-#Vadim Babiy Wednessday
 #!/usr/bin/python3
+#Vadim Babiy Wednessday
+
 import _thread, smbus, socket, sys, time
 
 #still needs: more try:except error escapes to prevent crashes on I/O errors
@@ -12,8 +13,6 @@ waterlevel = 0
 waterpump = 0
 heaterswitch = 0
 lightswitch = 0
-lowtemp = 0
-hitemp = 0
 fanswitch = 0
 temp_sensor = 0
 light_sensor = 0
@@ -23,7 +22,8 @@ def web_server():
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind(('', 12341))
     serverSocket.listen(1)
-
+    global waterlevel, temp_sensor, light_sensor, humidity_sensor
+    
     while True:
         connectionSocket, addr = serverSocket.accept()
         print('Ready to serve...')
@@ -56,6 +56,28 @@ def web_server():
         connectionSocket.send(b'humidity sensor = ' + bytes(str(humidity_sensor), 'ascii') + b'% <p>')
         connectionSocket.send(b'</body></html>')
         connectionSocket.close()
+
+    writeFile()
+
+def writeFile():
+    global waterlevel, temp_sensor, light_sensor, humidity_sensor
+    f = open(tf, 'w')
+    f.writelines(str(waterlevel) + "\n"
+                 + str(temp_sensor) + "\n"
+                 + str(light_sensor) + "\n"
+                 + str(humidity_sensor) + "\n"
+                 )
+    f.close()
+
+def readFile():
+    f = open(tf, 'r')
+    print("\n\nGreen Machine\n")
+    print("Water level = " + f.readline())
+    print("Temperature Sensor = " + f.readline())
+    print("Light Sensor = " + f.readline())
+    print("Humidity Sensor = " + f.readline())
+    f.close()
+
         
 try: 
     _thread.start_new_thread(web_server,() )
@@ -72,6 +94,7 @@ def readNumber():
 
 def number11():
     #jeremy
+    global waterlevel, waterpump, heaterswitch, lightswitch
     print("This is Jeremy's Arduino")
     while True:
         print("0 for exit")
@@ -110,8 +133,12 @@ def number11():
             continue
 
 
+
+
+
 def number12():
     #wesley
+    global fanswitch
     print("you chose Wesley's Arduino")
     while True:
         #print("Current temp is <insert temp>")
@@ -147,6 +174,7 @@ def number12():
         
 def number13():
     #daniel
+    global temp_sensor, light_sensor, humidity_sensor
     print("Daniel's Arduino reporting")
     while True:
         print("0 for exit")
@@ -164,7 +192,7 @@ def number13():
             writeNumber(options)
             time.sleep(1)
             temp_sensor = readNumber()
-            print("temperature = " + str(temp_sensor))
+            print("temperature = " + str(temp_sensor) + "C")
         elif options == 2:
             writeNumber(options)
             time.sleep(1)
@@ -174,27 +202,13 @@ def number13():
             writeNumber(options)
             time.sleep(1)
             humidity_sensor = readNumber()
-            print("humidity = " + str(humidity_sensor))
+            print("humidity = " + str(humidity_sensor) + "%")
         if not options:
             continue
 
-def writeFile():
-    f = open(tf, 'w')
-    f.writelines(str(waterlevel) +"\n" + str(waterpump) + "\n"
-            + str(heaterswitch) + "\n" + str(lightswitch) + "\n"
-            + str(lowtemp) + "\n" + str(hitemp) + "\n"
-            + str(fanswitch) + "\n" + str(temp_sensor) + "\n"
-            + str(light_sensor) + "\n" + str(humidity_sensor) + "\n"
-            )
-    f.close()
-
-def showData():
-    print("water level = " + str(waterlevel))
-    print("water pump = " + str(waterpump))
-
 while True:
     print("0 for write file")
-    print("1 for show data")
+    print("1 for read file")
     print("11 for Jeremy")
     print("12 for Wesley")
     print("13 for Daniel")
@@ -209,7 +223,7 @@ while True:
     elif address == 13:
         number13()
     elif address == 1:
-        showData()
+        readFile()
     elif address == 0:
         writeFile()
     else:
