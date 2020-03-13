@@ -1,3 +1,3 @@
 # Welcome to greenmachine185!
 
-## [Wiki](/wiki)
+## [Wiki](https://github.com/jeremyshaw/microgreenhouse/wiki)
