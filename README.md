@@ -1,3 +1,3 @@
 # Welcome to greenmachine185!
 
-## [Wiki](wiki)
+## [Wiki](/wiki)
